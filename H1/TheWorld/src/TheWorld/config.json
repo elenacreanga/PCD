@@ -1,0 +1,8 @@
+﻿{
+  "AppSettings": {
+    "SiteEmailAddress": "Me@gmail.com"
+  },
+  "Data": {
+    "WorldContextConnection": "Server=HI89088; Database=TheWorldDb; Trusted_Connection=true;MultipleActiveResultSets=true;"
+  }
+}
