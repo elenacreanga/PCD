@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNet.Authorization;
 using TheWorld.Models;
 using TheWorld.Services;
 using TheWorld.ViewModels;
 
 namespace TheWorld.Controllers.Api
 {
+    [Authorize]
     [Route("api/trips/{tripName}/stops")]
     public class StopsController : ApiController
     {
@@ -31,7 +33,7 @@ namespace TheWorld.Controllers.Api
         {
             try
             {
-                var results = worldRepository.GetTripByName(tripName);
+                var results = worldRepository.GetTripByName(tripName, User.Identity.Name);
                 if (results == null)
                 {
                     return Ok();
@@ -61,7 +63,7 @@ namespace TheWorld.Controllers.Api
                     }
                     stop.Latitude = coordResult.Latitude;
                     stop.Longitude = coordResult.Longitude;
-                    worldRepository.AddStop(tripName, stop);
+                    worldRepository.AddStop(tripName, User.Identity.Name, stop);
 
                     if (worldRepository.SaveAll())
                     {
