@@ -12,9 +12,14 @@ namespace TheWorld.Models
 
         void AddTrip(Trip newTrip);
 
-        Trip GetTripByName(string tripName, string username);
+        Trip GetTripByName(string username, string tripName);
 
         void AddStop(string tripName, string username, Stop stop);
+
         IEnumerable<Trip> GetUserTripsWithStops(string name);
+
+        void DeleteStop(int stopId);
+
+        void EditStop(Stop stop);
     }
 }

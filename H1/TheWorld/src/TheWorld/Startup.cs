@@ -1,16 +1,16 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Serialization;
+using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Mvc;
 using TheWorld.Models;
 using TheWorld.Services;
 using TheWorld.ViewModels;
@@ -37,7 +37,7 @@ namespace TheWorld
             services.AddMvc(config =>
             {
 #if !DEBUG
-                config.Filters.Add(new RequireHttpsAttribute()); 
+                config.Filters.Add(new RequireHttpsAttribute());
 #endif
             })
                 .AddJsonOptions(
@@ -53,9 +53,9 @@ namespace TheWorld
                 {
                     OnRedirectToLogin = ctx =>
                     {
-                        if (ctx.Request.Path.StartsWithSegments("/api/") && ctx.Response.StatusCode == (int) HttpStatusCode.OK)
+                        if (ctx.Request.Path.StartsWithSegments("/api/") && ctx.Response.StatusCode == (int)HttpStatusCode.OK)
                         {
-                            ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         }
                         else
                         {
@@ -95,7 +95,7 @@ namespace TheWorld
             app.UseMvc(config =>
             {
                 config.MapRoute(name: "Default",
-                    template: "{controller}/{action}/{id?}",
+                    template: "{controller}/{action}/{id}",
                     defaults: new { controller = "App", action = "Index" }
                     );
             });

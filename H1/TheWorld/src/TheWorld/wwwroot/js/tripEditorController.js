@@ -11,18 +11,37 @@
         vm.stops = [];
         vm.errorMessage = "";
         vm.isBusy = true;
+        vm.newStop = {};
+        var url = "/api/trips/" + vm.tripName + "/stops";
 
-        $http.get("/api/trips/" + vm.tripName + "/stops")
+        $http.get(url)
             .then(function(response) {
-                angular.copy(response.data, vm.stops);
+                    angular.copy(response.data, vm.stops);
                     _showMap(vm.stops);
                 },
                 function(error) {
                     vm.errorMessage = "Couldn't get stops: " + error;
                 })
-        .finally(function () {
-            vm.isBusy = false;
-        });
+            .finally(function() {
+                vm.isBusy = false;
+            });
+
+        vm.addStop = function() {
+            vm.isBusy = true;
+            vm.errorMessage = "";
+            $http.post(url, vm.newStop)
+                .then(function(response) {
+                        vm.stops.push(response.data);
+                        _showMap(vm.stops);
+                        vm.newStop = {};
+                    },
+                    function(error) {
+                        vm.errorMessage = "Failed to add new stop: " + error;
+                    })
+                .finally(function() {
+                    vm.isBusy = false;
+                });
+        };
     }
 
     function _showMap(stops) {

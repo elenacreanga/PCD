@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.Authorization;
 using TheWorld.Models;
 using TheWorld.Services;
 using TheWorld.ViewModels;
@@ -48,6 +48,7 @@ namespace TheWorld.Controllers.Api
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Post(string tripName, [FromBody]StopViewModel viewModel)
         {
             try
@@ -76,6 +77,63 @@ namespace TheWorld.Controllers.Api
             catch (Exception e)
             {
                 const string errorMessage = "Failed to save a new stop";
+                stopsLogger.LogError(errorMessage, e);
+                ModelState.AddModelError(errorMessage, e.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpPut]
+        [Route("api/trips/stops/")]
+        public async Task<IActionResult> Put([FromBody] StopViewModel viewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var stop = Mapper.Map<Stop>(viewModel);
+                    var coordResult = await coordService.Lookup(stop.Name);
+                    if (!coordResult.Success)
+                    {
+                        ModelState.AddModelError(coordResult.Message, "");
+                        return BadRequest(ModelState);
+                    }
+                    stop.Latitude = coordResult.Latitude;
+                    stop.Longitude = coordResult.Longitude;
+                    worldRepository.EditStop(stop);
+
+                    if (worldRepository.SaveAll())
+                    {
+                        viewModel = Mapper.Map<StopViewModel>(stop);
+                        return Ok(viewModel);
+                    }
+                }
+                return BadRequest(ModelState);
+            }
+            catch (Exception e)
+            {
+                const string errorMessage = "Failed to save a new stop";
+                stopsLogger.LogError(errorMessage, e);
+                ModelState.AddModelError(errorMessage, e.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int stopId)
+        {
+            try
+            {
+                worldRepository.DeleteStop(stopId);
+                if (worldRepository.SaveAll())
+                {
+                    return new NoContentResult();
+                }
+                return BadRequest(ModelState);
+            }
+            catch (Exception e)
+            {
+                const string errorMessage = "Failed to delete stop";
                 stopsLogger.LogError(errorMessage, e);
                 ModelState.AddModelError(errorMessage, e.Message);
                 return BadRequest(ModelState);

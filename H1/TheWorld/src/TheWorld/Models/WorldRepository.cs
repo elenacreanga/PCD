@@ -54,7 +54,7 @@ namespace TheWorld.Models
             context.Add(newTrip);
         }
 
-        public Trip GetTripByName(string tripName, string username)
+        public Trip GetTripByName(string username, string tripName)
         {
             var trip = context.Trips.Include(x => x.Stops)
                 .FirstOrDefault(x => x.Name.Equals(tripName) && x.Username.Equals(username));
@@ -64,7 +64,7 @@ namespace TheWorld.Models
         public void AddStop(string tripName, string username, Stop stop)
         {
             var trip = GetTripByName(tripName, username);
-            stop.Order = trip.Stops.Max(x => x.Order) + 1;
+            stop.Order = trip.Stops.Count > 0 ? trip.Stops.Max(x => x.Order) + 1 : 1;
             trip.Stops.Add(stop);
             context.Stops.Add(stop);
         }
@@ -82,6 +82,38 @@ namespace TheWorld.Models
             {
                 logger.LogError("Could not get db trips", ex);
                 return null;
+            }
+        }
+
+        public void EditStop(Stop updatedStop)
+        {
+            var stop = context.Stops.FirstOrDefault(x => x.Id == updatedStop.Id);
+            if (stop == null) return;
+            stop.Name = updatedStop.Name;
+            stop.Arrival = updatedStop.Arrival;
+            stop.Latitude = updatedStop.Latitude;
+            stop.Longitude = updatedStop.Longitude;
+        }
+
+        public void DeleteStop(int stopId)
+        {
+            try
+            {
+                var trip = context.Trips.FirstOrDefault(x => x.Stops.First(s => s.Id == stopId) != null);
+                context.Trips.Remove(trip);
+                var stop = context.Stops.FirstOrDefault(x => x.Id == stopId);
+                context.Stops.Remove(stop);
+                var order = 1;
+                foreach (var tripstop in trip.Stops.OrderBy(x => x.Order))
+                {
+                    tripstop.Order = order;
+                    order++;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Could not get db trips", ex);
+                throw;
             }
         }
     }

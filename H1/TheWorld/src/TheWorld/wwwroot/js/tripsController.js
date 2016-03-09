@@ -10,8 +10,9 @@
 
         vm.errorMessage = "";
         vm.isBusy = true;
+        var url = "/api/trips";
 
-        $http.get("/api/trips")
+        $http.get(url)
             .then(function(response) {
                 angular.copy(response.data, vm.trips);
             }, function(error) {
@@ -26,7 +27,7 @@
             vm.isBusy = true;
             vm.errorMessage = "";
 
-            $http.post("/api/trips", vm.newTrip)
+            $http.post(url, vm.newTrip)
                 .then(function(response) {
                     vm.trips.push(response.data);
                     vm.newTrip = {};
