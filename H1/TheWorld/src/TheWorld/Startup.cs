@@ -95,7 +95,7 @@ namespace TheWorld
             app.UseMvc(config =>
             {
                 config.MapRoute(name: "Default",
-                    template: "{controller}/{action}/{id}",
+                    template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "App", action = "Index" }
                     );
             });
