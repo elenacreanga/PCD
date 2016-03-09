@@ -26,8 +26,7 @@ namespace TheWorld.Controllers.Web
         [Authorize]
         public IActionResult Trips()
         {
-            var trips = worldRepository.GetAllTrips().OrderBy(x => x.Name).ToList();
-            return View(trips);
+            return View();
         }
 
         public IActionResult About()
