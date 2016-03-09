@@ -29,7 +29,7 @@ namespace TheWorld.Models
                     FirstTrip = DateTime.UtcNow
                 };
 
-                await userManager.CreateAsync(user, "P@ssw0rd!");
+                await userManager.CreateAsync(user, "Portocala12#");
             }
 
             if (context.Trips.Any()) return;
@@ -37,7 +37,7 @@ namespace TheWorld.Models
             {
                 Name = "US Trip",
                 Created = DateTime.UtcNow,
-                Username = "",
+                Username = "elenacreanga",
                 Stops = new List<Stop>()
                 {
                     new Stop()
@@ -96,7 +96,7 @@ namespace TheWorld.Models
             {
                 Name = "World Trp",
                 Created = DateTime.UtcNow,
-                Username = "",
+                Username = "elenacreanga",
                 Stops = new List<Stop>()
                 {
                     new Stop()

@@ -67,5 +67,21 @@ namespace TheWorld.Models
             trip.Stops.Add(stop);
             context.Stops.Add(stop);
         }
+
+        public IEnumerable<Trip> GetUserTripsWithStops(string name)
+        {
+            try
+            {
+                return context.Trips.Include(x => x.Stops)
+                    .OrderBy(x => x.Name)
+                    .Where(x => x.Username.Equals(name))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Could not get db trips", ex);
+                return null;
+            }
+        }
     }
 }

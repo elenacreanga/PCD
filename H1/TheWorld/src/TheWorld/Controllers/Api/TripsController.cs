@@ -4,11 +4,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using Microsoft.AspNet.Authorization;
 using TheWorld.Models;
 using TheWorld.ViewModels;
 
 namespace TheWorld.Controllers.Api
 {
+    [Authorize]
     [Route("api/trips")]
     public class TripsController : ApiController
     {
@@ -24,7 +26,8 @@ namespace TheWorld.Controllers.Api
         [HttpGet("")]
         public IActionResult Get()
         {
-            var results = Mapper.Map<IEnumerable<TripViewModel>>(worldRepository.GetAllTripsWithStops());
+            var trips = worldRepository.GetUserTripsWithStops(User.Identity.Name);
+            var results = Mapper.Map<IEnumerable<TripViewModel>>(trips);
             return Ok(results);
         }
 
@@ -36,6 +39,8 @@ namespace TheWorld.Controllers.Api
                 if (ModelState.IsValid)
                 {
                     var newTrip = Mapper.Map<Trip>(vm);
+                    newTrip.Username = User.Identity.Name;
+
                     tripLogger.LogInformation("Attempting to save a new trip");
                     worldRepository.AddTrip(newTrip);
                     if (worldRepository.SaveAll())

@@ -35,18 +35,21 @@ namespace TheWorld.Controllers.Auth
             {
                 if (string.IsNullOrWhiteSpace(returnUrl))
                 {
-                    RedirectToAction("Trips", "App");
+                    return RedirectToAction("Trips", "App");
                 }
-                else
-                {
-                    Redirect(returnUrl);
-                }
+                return Redirect(returnUrl);
             }
-            else
-            {
-                ModelState.AddModelError("", "Incorrect username or password");
-            }
+            ModelState.AddModelError("", "Incorrect username or password.");
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                await signInManager.SignOutAsync();
+            }
+            return RedirectToAction("Index", "App");
         }
     }
 }
