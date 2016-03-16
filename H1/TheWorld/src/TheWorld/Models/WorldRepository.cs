@@ -54,10 +54,14 @@ namespace TheWorld.Models
             context.Add(newTrip);
         }
 
-        public Trip GetTripByName(string username, string tripName)
+        public Trip GetTripByName(string tripName, string username)
         {
-            var trip = context.Trips.Include(x => x.Stops)
-                .FirstOrDefault(x => x.Name.Equals(tripName) && x.Username.Equals(username));
+            var trip = context.Trips
+                .Include(x => x.Stops)
+                .FirstOrDefault(
+                    x =>
+                        x.Name.Equals(tripName) &&
+                        x.Username.Equals(username));
             return trip;
         }
 
