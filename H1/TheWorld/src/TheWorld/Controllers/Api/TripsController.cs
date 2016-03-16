@@ -32,7 +32,7 @@ namespace TheWorld.Controllers.Api
             var results = Mapper.Map<IList<TripViewModel>>(trips);
             foreach (var trip in results)
             {
-                trip.Links = GenerateTripLinks(trip);
+                trip.Links = GenerateLinks(trip);
             }
             return Ok(results);
         }
@@ -61,7 +61,7 @@ namespace TheWorld.Controllers.Api
                     if (worldRepository.SaveAll())
                     {
                         var trip = Mapper.Map<TripViewModel>(newTrip);
-                        trip.Links = GenerateTripLinks(trip);
+                        trip.Links = GenerateLinks(trip);
                         return Created("", trip);
                     }
                 }
@@ -76,7 +76,7 @@ namespace TheWorld.Controllers.Api
             return BadRequest(false.ToString());
         }
 
-        private static List<Link> GenerateTripLinks(TripViewModel newTrip)
+        private static List<Link> GenerateLinks(TripViewModel newTrip)
         {
             var links = new List<Link>
             {

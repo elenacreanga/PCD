@@ -38,7 +38,8 @@ namespace TheWorld.Controllers.Api
                 {
                     return Ok();
                 }
-                return Ok(Mapper.Map<IEnumerable<StopViewModel>>(results.Stops.OrderBy(x => x.Order)));
+                var stops = StopViewModel.MapToViewModel(results);
+                return Ok(stops);
             }
             catch (Exception e)
             {
@@ -69,6 +70,7 @@ namespace TheWorld.Controllers.Api
                     if (worldRepository.SaveAll())
                     {
                         viewModel = Mapper.Map<StopViewModel>(stop);
+                        viewModel.Links = StopViewModel.GenerateLinks(viewModel, tripName);
                         return Created("", viewModel);
                     }
                 }

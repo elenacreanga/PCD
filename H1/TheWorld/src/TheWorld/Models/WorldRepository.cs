@@ -103,9 +103,10 @@ namespace TheWorld.Models
         {
             try
             {
-                var trip = context.Trips.FirstOrDefault(x => x.Stops.First(s => s.Id == stopId) != null);
-                context.Trips.Remove(trip);
+                var trip = context.Trips.FirstOrDefault(x => x.Stops.FirstOrDefault(s => s.Id == stopId) != null);
                 var stop = context.Stops.FirstOrDefault(x => x.Id == stopId);
+                trip.Stops.Remove(stop);
+                SaveAll();
                 context.Stops.Remove(stop);
                 var order = 1;
                 foreach (var tripstop in trip.Stops.OrderBy(x => x.Order))
