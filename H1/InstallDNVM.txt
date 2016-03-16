@@ -1,0 +1,13 @@
+ .\dnvm install 1.0.0-rc1-final -r coreclr -arch x86
+ .\dnvm install 1.0.0-rc1-final -r coreclr
+ 
+ .\dnvm install 1.0.0-rc1-final -arch x86
+ .\dnvm install 1.0.0-rc1-final -arch x64
+ 
+ cls
+ 
+ .\dnvm list
+ 
+ .\dnvm use 1.0.0-rc1-final -r clr -arch x86    [-p ]
+ 
+ 
