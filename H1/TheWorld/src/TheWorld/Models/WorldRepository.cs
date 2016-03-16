@@ -91,12 +91,19 @@ namespace TheWorld.Models
 
         public void EditStop(Stop updatedStop)
         {
-            var stop = context.Stops.FirstOrDefault(x => x.Id == updatedStop.Id);
-            if (stop == null) return;
-            stop.Name = updatedStop.Name;
-            stop.Arrival = updatedStop.Arrival;
-            stop.Latitude = updatedStop.Latitude;
-            stop.Longitude = updatedStop.Longitude;
+            try
+            {
+                var stop = context.Stops.FirstOrDefault(x => x.Id == updatedStop.Id);
+                if (stop == null) return;
+                stop.Name = updatedStop.Name;
+                stop.Arrival = updatedStop.Arrival;
+                stop.Latitude = updatedStop.Latitude;
+                stop.Longitude = updatedStop.Longitude;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Could not update stop", ex);
+            }
         }
 
         public void DeleteStop(int stopId)

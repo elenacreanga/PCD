@@ -85,9 +85,8 @@ namespace TheWorld.Controllers.Api
             }
         }
 
-        [HttpPut]
-        [Route("api/trips/stops/")]
-        public async Task<IActionResult> Put([FromBody] StopViewModel viewModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] StopViewModel viewModel)
         {
             try
             {
@@ -102,6 +101,7 @@ namespace TheWorld.Controllers.Api
                     }
                     stop.Latitude = coordResult.Latitude;
                     stop.Longitude = coordResult.Longitude;
+                    stop.Id = id;
                     worldRepository.EditStop(stop);
 
                     if (worldRepository.SaveAll())
@@ -109,6 +109,7 @@ namespace TheWorld.Controllers.Api
                         viewModel = Mapper.Map<StopViewModel>(stop);
                         return Ok(viewModel);
                     }
+                    return Ok();
                 }
                 return BadRequest(ModelState);
             }
