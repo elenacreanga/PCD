@@ -1,0 +1,19 @@
+﻿#mapContainer {
+    width: 500px;
+    height: 400px;
+    margin-top: 10px;
+}
+
+#directionsContainer {
+    max-width: 300px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#searchHistoryContainer{
+    margin-top: 5px;
+    border: 1px solid black;
+    width: 500px;
+}
