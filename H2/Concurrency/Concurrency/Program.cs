@@ -5,13 +5,16 @@ namespace Concurrency
 {
     public class Program
     {
-        private static readonly Mutex Mutex = new Mutex(false, "bogotobogo.com");
+        private static readonly Mutex Mutex = new Mutex(false, "Concurrency");
+        private static readonly Semaphore Semaphore = new Semaphore(4, 5);
 
         public static void Main(string[] args)
         {
             PrintThread();
 
             UseMutex();
+
+            UseSemaphore();
         }
 
         private static void PrintThread()
@@ -48,6 +51,22 @@ namespace Concurrency
             {
                 Mutex.ReleaseMutex();
             }
+        }
+
+        private static void UseSemaphore()
+        {
+            for (var i = 1; i <= 7; i++) new Thread(Enter).Start(i);
+            Console.ReadLine();
+        }
+
+        private static void Enter(object id)
+        {
+            Console.WriteLine($"{id} is trying to enter");
+            Semaphore.WaitOne();
+            Console.WriteLine($"{id} is in!");
+            Thread.Sleep(100 * (int)id);
+            Console.WriteLine($"{id} is leaving");
+            Semaphore.Release();
         }
     }
 }
