@@ -9,7 +9,9 @@ namespace Concurrency
 
         public void ThreadJob()
         {
-            lock (threadLock)
+            Monitor.Enter(threadLock);
+            try
+            //lock (threadLock)
             {
                 Console.WriteLine(Thread.CurrentThread.Name);
                 Console.WriteLine($"Here are the numbers for: {Thread.CurrentThread.Name}");
@@ -20,6 +22,10 @@ namespace Concurrency
                     Console.Write($"{i} ");
                 }
                 Console.WriteLine();
+            }
+            finally
+            {
+                Monitor.Exit(threadLock);
             }
         }
     }
