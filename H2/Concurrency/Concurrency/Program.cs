@@ -10,14 +10,14 @@ namespace Concurrency
             var pt = new PrintingThread();
 
             // 10 threads that are all pointing to the same method on the same object
-            var ts = new Thread[10];
+            var threads = new Thread[10];
             for (var i = 0; i < 10; i++)
             {
-                ts[i] = new Thread(new ThreadStart(pt.ThreadJob));
-                ts[i].Name = $"Worker thread [{i}]";
+                threads[i] = new Thread(new ThreadStart(pt.ThreadJob));
+                threads[i].Name = $"Worker thread [{i}]";
             }
 
-            foreach (var t in ts) t.Start();
+            foreach (var thread in threads) thread.Start();
 
             Console.ReadLine();
         }

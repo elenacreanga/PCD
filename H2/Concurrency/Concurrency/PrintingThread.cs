@@ -5,17 +5,22 @@ namespace Concurrency
 {
     public class PrintingThread
     {
+        private readonly object threadLock = new object();
+
         public void ThreadJob()
         {
-            Console.WriteLine(Thread.CurrentThread.Name);
-            Console.WriteLine($"Here are the numbers for: {Thread.CurrentThread.Name}");
-            for (var i = 0; i < 10; i++)
+            lock (threadLock)
             {
-                var r = new Random();
-                Thread.Sleep(1000 * r.Next(2));
-                Console.Write($"{i} ");
+                Console.WriteLine(Thread.CurrentThread.Name);
+                Console.WriteLine($"Here are the numbers for: {Thread.CurrentThread.Name}");
+                for (var i = 0; i < 10; i++)
+                {
+                    var random = new Random();
+                    Thread.Sleep(1000 * random.Next(2));
+                    Console.Write($"{i} ");
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
         }
     }
 }
