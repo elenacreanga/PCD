@@ -1,0 +1,20 @@
+Lab 6
+Files systems
+	directory module
+	file module
+	access control module - roles and rights
+	file access module - how it is read
+	block module - how it is stocked at disk level
+	device module - UI interface
+
+Throughput - data quantity transfered/ no of operation allowed at a certain moment
+
+
+VFS = client module
+i-node = tends to be reused after a file is deleted
+
+
+consistency in AFS - callback promise
+
+virtualization methods
+

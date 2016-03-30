@@ -1,6 +1,8 @@
 <?php
     use google\appengine\api\users\User;
     use google\appengine\api\users\UserService;
+    use google\appengine\api\cloud_storage\CloudStorageTools;
+
     $user = UserService::getCurrentUser();
     if (!$user) {
         header('Location: ' . UserService::createLoginURL($_SERVER['REQUEST_URI']));
@@ -21,6 +23,9 @@
     }
 
     $searchHistoryList = getData($id);
+    
+    $options = [ 'gs_bucket_name' => 'https://storage.googleapis.com/pcd-h3/' ];
+    $upload_url = CloudStorageTools::createUploadUrl('/upload_handler.php', $options);
 ?>
 <!DOCTYPE html>
 
@@ -30,7 +35,7 @@
         <title>Route Images</title>
         <link href="stylesheets/style.css" rel="stylesheet" />
     </head>
-    <body>
+    <body onload="auth()">   
         <div id="form">
             <label>From:</label>
             <input type="text" id="fromInput"/>
@@ -39,6 +44,15 @@
             <button id="btnSearch">Search</button>
             <button id="btnSendMail">Send Route Images Mail</button>
         </div>
+        <br>
+        <div>
+            <form action="<?php echo $upload_url?>" enctype="multipart/form-data" method="post">
+                Files to upload: <br>
+            <input type="file" name="uploaded_files" size="40">
+            <input type="submit" value="Send">
+            </form>
+        </div>
+        <br>
         <div id="userHolder">
             <?php
                 echo 'Hello, <b>' . htmlspecialchars($user->getNickname()) . '</b>,&nbsp';
@@ -64,6 +78,17 @@
                 ?>
             </ul>
         </div>
+         <div id="bigQueryContainer">
+            <div>
+                <label>
+                    <b>Country details:</b>
+                </label>             
+            </div>
+
+            <div id="bigQueryList">
+               
+            </div>
+        </div>
         <div id="mapContainer"></div>
         <div id="directionsContainer"></div>
         <ul id="routeImagesContainer"></ul>
@@ -75,5 +100,9 @@
         <script src="scripts/History.js"></script>
         <script src="scripts/Mail.js"></script>
         <script src="scripts/script.js"></script>
+
+        <script src="scripts/BigQuery.js"></script>
+        <script src="https://apis.google.com/js/client.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     </body>
 </html>

@@ -19,8 +19,8 @@
 
     //--events--\\
     function onBtnSearchClick() {
-        var fromLocation = fromInput.value;
-        var toLocation = toInput.value;
+        var fromLocation =fromInput.value;
+        var toLocation =toInput.value;
         if (isEmpty(fromLocation)) {
             alert("Insert [From] Location!");
             return;
@@ -29,8 +29,11 @@
             alert("Insert [To] Location!");
             return;
         }
+        //document.getElementById("bigQueryList").innerHTML = "";
+       // runQuery(fromLocation);
+       // runQuery(toLocation);
         getRoute(fromLocation, toLocation);
-        addRouteToHistory(fromLocation, toLocation);
+        addRouteToHistory(fromLocation, toLocation);      
     };
 
     function onBtnClearSearchHistoryClick(){
@@ -99,7 +102,8 @@
             return;
         }
         directionsDisplay.setDirections(response);
-        getImages(response);
+        getImages(response);   
+
     };
 
     function getImages(route) {
@@ -112,16 +116,21 @@
                 GeocodingAPI.getAddress(locationLatLng.lat(), locationLatLng.lng()).done(addressLoaded);
             }
         }
+
     };
 
     function addressLoaded(response) {
+    
         for (var i = 0; i < response.results.length; i++) {
             var address = response.results[i].formatted_address;
+          
             if (!wayPointsImages[address]) {
                 wayPointsImages[address] = true;
                 FlickrAPI.getImages(address).done(onAddressImageLoaded(address));
             }
         }
+       
+       
     };
 
     function onAddressImageLoaded(address) {
@@ -136,7 +145,8 @@
             img.title = address;
             li.appendChild(img);
             routeImagesContainer.appendChild(li);
-            console.log(address + " -> " + FlickrAPI.getImageUrl(photo));
+           
+           // console.log(address + " -> " + FlickrAPI.getImageUrl(photo));
         };
     };
 
@@ -171,7 +181,10 @@
     function isEmpty(str) {
         return (!str || 0 === str.length);
     }
+
+       
     //--methods--\\
+
 
     initializeMap();
 
