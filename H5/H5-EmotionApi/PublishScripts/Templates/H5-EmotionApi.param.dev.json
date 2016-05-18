@@ -1,0 +1,29 @@
+{
+  "siteName": {
+    "value": "h5-emotionApi"
+  },
+  "hostingPlanName": {
+    "value": "TestAppServicePlan"
+  },
+  "siteLocation": {
+    "value": "North Europe"
+  },
+  "sku": {
+    "value": "Free"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "siteMode": {
+    "value": "Limited"
+  },
+  "computeMode": {
+    "value": "0"
+  },
+  "subscriptionId": {
+    "value": "6145679a-a33c-44a9-9174-c7f529f20b5c"
+  },
+  "resourceGroup": {
+    "value": "TestAppResourceGroup"
+  }
+}
